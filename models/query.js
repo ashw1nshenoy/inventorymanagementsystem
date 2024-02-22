@@ -4,17 +4,59 @@ const db=require('../db/connect')
 
 
 //Query to count All orders
-const countOrders=(res)=>{
-    const ans=`SELECT count(ord_no) FROM inventory.orders`
-    db.query(ans,(error,result,feilds)=>{
-    if(error)
-        return res.status(400).json(error)
-    return res.status(200).json(result)
-})
+const countProducts = () => {
+    return new Promise((resolve, reject) => {
+        const ans = `SELECT count(product_no) AS product_count FROM inventory.products`;
+        db.query(ans, (error, result, fields) => {
+            if (error)
+                reject(error);
+            else
+                resolve(result[0].product_count);
+        });
+    });
+}
+
+const countOrders = () => {
+    return new Promise((resolve, reject) => {
+        const ans = `SELECT count(ord_no) AS order_count FROM inventory.orders`;
+        db.query(ans, (error, result, fields) => {
+            if (error)
+                reject(error);
+            else
+                resolve(result[0].order_count);
+        });
+    });
+}
+
+const countUsers = () => {
+    return new Promise((resolve, reject) => {
+        const ans = `SELECT count(id) AS user_count FROM inventory.users`;
+        db.query(ans, (error, result, fields) => {
+            if (error)
+                reject(error);
+            else
+                resolve(result[0].user_count);
+        });
+    });
+}
+
+const countStores = () => {
+    return new Promise((resolve, reject) => {
+        const ans = `SELECT count(store_no) AS store_count FROM inventory.stores`;
+        db.query(ans, (error, result, fields) => {
+            if (error)
+                reject(error);
+            else
+                resolve(result[0].store_count);
+        });
+    });
 }
 
 
 
 module.exports={
-    countOrders
+    countOrders,
+    countProducts,
+    countUsers,
+    countStores
 }
