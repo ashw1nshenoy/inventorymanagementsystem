@@ -1,4 +1,3 @@
-// const mysql=require('mysql')
 const db=require('../db/connect')
 
 
@@ -66,7 +65,7 @@ const getAllBrands=(res)=>{
 }
 
 
-//insert a new brand
+//Insert a new brand
 
 const insertBrand=(res,brandName,status)=>{
     const ans=`call add_or_delete_brands(0,?,?)`
@@ -82,22 +81,47 @@ const insertBrand=(res,brandName,status)=>{
 
 const updateBrand=(res,body,id)=>{
     const ans=`call add_or_delete_brands(?,?,?)`
-    db.query(ans,[id,   body.brandName,body.status],(error,result,feilds)=>{
+    db.query(ans,[id,body.brandName,body.status],(error,result,feilds)=>{
         if(error)
             return res.status(400).json(error)
         return res.status(200).json({Message:"Update Suceesful"})
     })
 }
 
-//delete a brand
+//Delete a brand
 
 const deleteBrand=(res,id)=>{
-    const ans=`delete from inventory.brand where brand_no = ?`
-    db.query(ans,[id],(error,result,feilds)=>{
-        if(error)
-            return res.status(400).json(error)
-        return res.status(200).json({Message:"delete sucessfull"})
-    })
+    const ans1=`delete from inventory.brand where brand_no = ?`
+    const ans2=`SET @counter = 0;
+    UPDATE brand
+    SET brand_no = @counter := @counter + 1;`
+    Promise.all([
+        new Promise((resolve, reject) => {
+          db.query(ans1,[id] ,(err, result,fields) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        }),
+        new Promise((resolve, reject) => {
+          db.query(ans2, (err, result,fields) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        })
+      ])
+      .then(([result1, result2]) => {
+        res.json({Message:"Deleted Successfully"});
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred' });
+      });
 }
 
 
@@ -121,9 +145,6 @@ const getAllproducts=(res)=>{
             return res.status(200).json(result)
         })  
  }
-
-
-
 
 
 

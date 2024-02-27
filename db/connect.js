@@ -12,7 +12,8 @@ const db=mysql.createConnection({
     user:'root',
     password:'',
     database:'inventory',
-    connectionLimit:10
+    connectionLimit:10,
+    multipleStatements: true
 }
 )
 module.exports=db
