@@ -89,6 +89,5 @@ module.exports={
     getBrands,
     insertNewBrand,
     deleteOneBrand,
-    updateOneBrand
-    
+    updateOneBrand   
 }
