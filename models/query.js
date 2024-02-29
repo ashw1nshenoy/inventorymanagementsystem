@@ -100,6 +100,51 @@ const deleteBrand=(res,id)=>{
 }
 
 
+//Get all the Store 
+const getAllStores=(res)=>{
+    const ans=`select * from inventory.stores`
+    db.query(ans,(error,result,fields)=>{
+        if(error)
+            return res.status(400).json(erorr)
+        return res.status(200).json(result)
+    })   
+}
+
+
+//insert a new store
+
+const insertStore=(res,storeName,status)=>{
+    const ans=`insert into inventory.stores values(0,?,?)`
+    db.query(ans,[storeName,status],(error,result,feilds)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json({Message:"Insertion Suceesful"})
+    })
+}
+
+//Edit a store 
+
+const updateStore=(res,storeName,statusStore,id)=>{
+    const ans=`update inventory.stores set store_name=?,status=? where store_no=?`
+    db.query(ans,[storeName,statusStore,id],(error,result,feilds)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json({Message:"Update Suceesful"})
+    })
+}
+
+//Delete a store
+
+const deleteStore=(res,id)=>{
+    const ans=`delete from inventory.stores where store_no = ?`
+    db.query(ans,[id],(error,result,fields)=>{
+        if(error)
+        return res.status(400).json(error)
+    return res.status(200).json({Message:"Delete Suceesful"})
+    })
+}
+
+
 //Get all the Products 
 const getAllproducts=(res)=>{
         const ans=`select * from inventory.products`
@@ -109,6 +154,8 @@ const getAllproducts=(res)=>{
             return res.status(200).json(result)
         })   
 }
+
+//
 
 
 //Get ALL Orders
@@ -147,8 +194,12 @@ module.exports={
     countStores,
     getAllproducts,
     getAllOrders,
+    getAllStores,
     getAllBrands,
     insertBrand,
     deleteBrand,
-    updateBrand
+    updateBrand,
+    insertStore,
+    updateStore,
+    deleteStore
 }

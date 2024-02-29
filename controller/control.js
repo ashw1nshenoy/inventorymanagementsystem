@@ -9,7 +9,11 @@ const{ countOrders,
         getAllBrands,
         insertBrand,
         deleteBrand,
-        updateBrand
+        updateBrand,
+        getAllStores,
+        insertStore,
+        updateStore,
+        deleteStore
     }=require('../models/query')
 
 
@@ -43,7 +47,7 @@ const getBrands=(req,res)=>{
 
 const insertNewBrand=(req,res)=>{
     const brandName=req.body.brandName
-    const status=req.body.status
+    const status=req.body.statusBrand
     insertBrand(res,brandName,status)
 }
 
@@ -61,6 +65,34 @@ const deleteOneBrand=(req,res)=>{
     deleteBrand(res,id)
 }
 
+
+//getAllStores
+
+const getStore=(req,res)=>{
+    getAllStores(res)
+}
+
+//insert a new Store
+const insertNewStore=(req,res)=>{
+    const storeName=req.body.storeName
+    const status=req.body.statusStore
+    insertStore(res,storeName,status)
+
+}
+
+//Update a Store
+const updateOneStore=(req,res)=>{
+    const storeName=req.body.storeName
+    const status=req.body.statusStore
+    updateStore(res,storeName,status,req.params.id)
+}
+
+
+//delete a store
+const deleteOneStore=(req,res)=>{
+    const id=req.params.id
+    deleteStore(res,id)
+}
 //getAllProducts
 
 
@@ -89,5 +121,9 @@ module.exports={
     getBrands,
     insertNewBrand,
     deleteOneBrand,
-    updateOneBrand   
+    updateOneBrand,
+    getStore,
+    insertNewStore ,
+    updateOneStore  ,
+    deleteOneStore
 }
