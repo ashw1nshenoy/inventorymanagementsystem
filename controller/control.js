@@ -13,7 +13,10 @@ const{ countOrders,
         getAllStores,
         insertStore,
         updateStore,
-        deleteStore
+        deleteStore,
+        insertProduct,
+        updateProduct,
+        deleteProduct
     }=require('../models/query')
 
 
@@ -100,6 +103,26 @@ const getProducts=(req,res)=>{
     getAllproducts(res)
 }
 
+//insert a new product
+const insertNewProduct=(req,res)=>{
+    const body=req.body
+    insertProduct(res,body)
+}
+
+
+//update product 
+const updateOneProduct=(req,res)=>{
+    const body=req.body
+    const id=req.params.id
+    updateProduct(res,body,id)
+}
+
+//delete a product 
+const deleteOneProduct=(req,res)=>{
+    const id=req.params.id
+    deleteProduct(res,id)
+}
+
 
 //getAllOrders
 
@@ -125,5 +148,8 @@ module.exports={
     getStore,
     insertNewStore ,
     updateOneStore  ,
-    deleteOneStore
+    deleteOneStore,
+    insertNewProduct,
+    updateOneProduct,
+    deleteOneProduct
 }

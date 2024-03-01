@@ -155,8 +155,44 @@ const getAllproducts=(res)=>{
         })   
 }
 
-//
+//insert new product 
 
+const insertProduct=(res,body)=>{
+    const ans=`insert into inventory.products values(0,?,?,?,?,?,?,?,?,?)`
+    db.query(ans,[body.productName,body.price,body.quantity,body.color,body.size,body.brand,body.category,body.store,body.availability],
+        (error,result,feilds)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json({Message:"Insertion Suceesful"})
+    })
+}
+
+
+//Update product 
+
+
+const updateProduct =(res,body,id)=>{
+    const ans=`update inventory.products set product_name=?,price=?,quantity=?,color=?,size=?,brand=?,category=?,\
+    store=?,availability=? where product_no=?`
+     db.query(ans,[body.productName,body.price,body.quantity,body.color,body.size,body.brand,body.category,body.store,body.availability,id],
+        (error,result,feilds)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json({Message:"Update Suceesful"})
+    })
+}
+
+
+//Delete a product
+
+const deleteProduct=(res,id)=>{
+    const ans=`delete from inventory.products where product_no = ?`
+    db.query(ans,[id],(error,result,fields)=>{
+        if(error)
+        return res.status(400).json(error)
+    return res.status(200).json({Message:"Delete Suceesful"})
+    })
+}
 
 //Get ALL Orders
  const getAllOrders=(res)=>{
@@ -201,5 +237,8 @@ module.exports={
     updateBrand,
     insertStore,
     updateStore,
-    deleteStore
+    deleteStore,
+    insertProduct,
+    updateProduct,
+    deleteProduct
 }
