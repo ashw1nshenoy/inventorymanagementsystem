@@ -18,7 +18,9 @@ const{
         insertProduct,
         updateProduct,
         deleteProduct,
-        OneBrand
+        createOrder,
+        delOrder,
+        updateOneOrder
     }=require('../models/query')
 
 
@@ -58,9 +60,9 @@ const insertNewBrand=(req,res)=>{
 
 //Update a brand
 
-const getOneBrand=(req,res)=>{
-    OneBrand(res,req.params.id);
-}
+// const getOneBrand=(req,res)=>{
+//     OneBrand(res,req.params.id);
+// }
 
 const updateOneBrand=(req,res)=>{
     updateBrand(res,req.body,req.params.id)
@@ -128,7 +130,7 @@ const deleteOneProduct=(req,res)=>{
     deleteProduct(res,id)
 }
 
-
+//Orders
 //getAllOrders
 
 const getOrders=(req,res)=>{
@@ -136,7 +138,26 @@ const getOrders=(req,res)=>{
 }
 
 
+//create a order
+const insertOrder=(req,res)=>{
+    const body=req.body
+    createOrder(res,body)
+}
 
+//update an order
+
+const updateOrder=(req,res)=>{
+    const body=req.body
+    const id=req.params.id
+    updateOneOrder(res,body,id)
+}
+
+//delete a order
+
+const deleteOrder=(req,res)=>{
+    const id=req.params.id
+    delOrder(res,id)
+}
 
 
 //export the functions
@@ -149,7 +170,6 @@ module.exports={
     getBrands,
     insertNewBrand,
     deleteOneBrand,
-    getOneBrand,
     updateOneBrand,
     getStore,
     insertNewStore ,
@@ -157,5 +177,8 @@ module.exports={
     deleteOneStore,
     insertNewProduct,
     updateOneProduct,
-    deleteOneProduct
+    deleteOneProduct,
+    insertOrder,
+    deleteOrder,
+    updateOrder
 }

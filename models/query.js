@@ -17,7 +17,7 @@ const countProducts = () => {
 
 const countOrders = () => {
     return new Promise((resolve, reject) => {
-        const ans = `SELECT count(ord_no) AS order_count FROM inventory.orders`;
+        const ans = `SELECT count(cust_id) AS order_count FROM inventory.orders`;
         db.query(ans, (error, result, fields) => {
             if (error)
                 reject(error);
@@ -79,21 +79,21 @@ const insertBrand=(res,brandName,status)=>{
 
 //get One Brand
 
-const OneBrand=(res,id)=>{
-    const ans=`select * from inventory.brand where brand_no=?`
-    db.query(ans,[id],(error,result,fields)=>{
-        if(error)
-            return res.status(400).json(error)
-        return res.status(200).json(result)
-    })
-}
+// const OneBrand=(res,id)=>{
+//     const ans=`select * from inventory.brand where brand_no=?`
+//     db.query(ans,[id],(error,result,fields)=>{
+//         if(error)
+//             return res.status(400).json(error)
+//         return res.status(200).json(result)
+//     })
+// }
 
 
 //Edit a brand 
 
 const updateBrand=(res,body,id)=>{
     const ans=`update inventory.brand set brand_name=?,Status=? where brand_no=?`
-    db.query(ans,[body.brandName,body.status,id],(error,result,feilds)=>{
+    db.query(ans,[body.brand_name,body.status,id],(error,result,feilds)=>{
         if(error)
             return res.status(400).json(error)
         return res.status(200).json({Message:"Update Suceesful"})
@@ -207,6 +207,9 @@ const deleteProduct=(res,id)=>{
     })
 }
 
+
+
+//orders 
 //Get ALL Orders
  const getAllOrders=(res)=>{
     const ans=`select * from inventory.orders`
@@ -218,6 +221,42 @@ const deleteProduct=(res,id)=>{
  }
 
 
+//create a new order
+const createOrder =(res,body)=>{
+    const ans=`insert into inventory.orders values(0,?,?,?,?,?,?,?)`
+    db.query(ans,[body.cust_name,body.cust_address,body.phone,body.product,body.quantity,body.amount,body.status],
+        (error,result,feilds)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json({Message:"Insertion Suceesful"})
+    })
+}
+
+
+//update a order
+
+const updateOneOrder=(res,body,id)=>{
+    const ans=`update inventory.orders set cust_name=?,cust_address=?,phone=?,product=?,quantity=?,amount=?,status=?
+     where cust_id=?`
+     db.query(ans,[body.cust_name,body.cust_address,body.phone,body.product,body.quantity,body.amount,body.status,id],
+        (error,result,feilds)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json({Message:"Update Suceesful"})
+    })
+}
+
+
+//delete a order 
+
+const delOrder=(res,id)=>{
+    const ans=`delete from inventory.orders where cust_id=?`
+    db.query(ans,[id],(error,result,feilds)=>{
+        if(error)
+            return res.status(404).json(error)
+        return res.status(200).json({Message:"Successfully Deleted"})
+    })
+}
 
 
 
@@ -247,12 +286,14 @@ module.exports={
     getAllBrands,
     insertBrand,
     deleteBrand,
-    OneBrand,
     updateBrand,
     insertStore,
     updateStore,
     deleteStore,
     insertProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    createOrder,
+    delOrder,
+    updateOneOrder
 }

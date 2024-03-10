@@ -3,7 +3,7 @@ require('dotenv').config();
 //Imports
 const express= require('express')
 const app=express()
-
+const cors=require('cors')
 
 //files
 const db=require('./db/connect')
@@ -15,8 +15,7 @@ const port=process.env.PORT
 
 //Middlewares
 app.use(express.json())
-
-
+app.use(cors())
 
 //Routes
 
