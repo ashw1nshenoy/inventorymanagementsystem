@@ -1,6 +1,7 @@
 //import the query file 
 
-const{ countOrders,
+const{ 
+        countOrders,
         countProducts,
         countUsers,
         countStores,
@@ -16,7 +17,8 @@ const{ countOrders,
         deleteStore,
         insertProduct,
         updateProduct,
-        deleteProduct
+        deleteProduct,
+        OneBrand
     }=require('../models/query')
 
 
@@ -56,6 +58,9 @@ const insertNewBrand=(req,res)=>{
 
 //Update a brand
 
+const getOneBrand=(req,res)=>{
+    OneBrand(res,req.params.id);
+}
 
 const updateOneBrand=(req,res)=>{
     updateBrand(res,req.body,req.params.id)
@@ -144,6 +149,7 @@ module.exports={
     getBrands,
     insertNewBrand,
     deleteOneBrand,
+    getOneBrand,
     updateOneBrand,
     getStore,
     insertNewStore ,

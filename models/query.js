@@ -77,6 +77,18 @@ const insertBrand=(res,brandName,status)=>{
 }
 
 
+//get One Brand
+
+const OneBrand=(res,id)=>{
+    const ans=`select * from inventory.brand where brand_no=?`
+    db.query(ans,[id],(error,result,fields)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json(result)
+    })
+}
+
+
 //Edit a brand 
 
 const updateBrand=(res,body,id)=>{
@@ -87,6 +99,7 @@ const updateBrand=(res,body,id)=>{
         return res.status(200).json({Message:"Update Suceesful"})
     })
 }
+
 
 //Delete a brand
 
@@ -234,6 +247,7 @@ module.exports={
     getAllBrands,
     insertBrand,
     deleteBrand,
+    OneBrand,
     updateBrand,
     insertStore,
     updateStore,
