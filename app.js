@@ -5,6 +5,7 @@ const express= require('express')
 const app=express()
 const cors=require('cors')
 
+
 //files
 const db=require('./db/connect')
 const routes=require('./routes/routes')
@@ -15,12 +16,30 @@ const port=process.env.PORT
 
 //Middlewares
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    methods: ['GET', 'POST', 'PUT', "DELETE"],
+    credentials: true
+}))
 
 //Routes
 
 app.use('/api/v1',routes)
-
+const verifyUser = (req, res, next) => {
+    const token = req.cookies.token;
+    if(token) {
+        Jwt.verify(token, "jwt_secret_key", (err ,decoded) => {
+            if(err) return res.json({Status: false, Error: "Wrong Token"})
+            req.id = decoded.id;
+            next()
+        })
+    } else {
+        return res.json({Status: false, Error: "Not autheticated"})
+    }
+}
+app.get('/verify',verifyUser, (req, res)=> {
+    return res.json({Status: true, role: req.role, id: req.id})
+} )
 
 //Starting the server
 const start=async()=>{

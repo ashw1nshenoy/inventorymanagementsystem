@@ -1,6 +1,7 @@
 //import the query file 
 
 const{ 
+        userLogin,
         countOrders,
         countProducts,
         countUsers,
@@ -20,11 +21,26 @@ const{
         deleteProduct,
         createOrder,
         delOrder,
-        updateOneOrder
+        updateOneOrder,
+        logout,
+        getOrderFromId,
+        OneBrand,
+        getProductFromId,
+        getBrandFromId
     }=require('../models/query')
 
 
+//Login
 
+const login=(req,res)=>{
+    userLogin(req,res);
+}
+
+//logout
+
+const userLogout=(req,res)=>{
+    logout(res)
+}
 //Dashboard 
 const dashboard=async(req,res)=>{
     try {
@@ -60,9 +76,9 @@ const insertNewBrand=(req,res)=>{
 
 //Update a brand
 
-// const getOneBrand=(req,res)=>{
-//     OneBrand(res,req.params.id);
-// }
+const getOneBrand=(req,res)=>{
+    OneBrand(res,req.params.id);
+}
 
 const updateOneBrand=(req,res)=>{
     updateBrand(res,req.body,req.params.id)
@@ -160,10 +176,27 @@ const deleteOrder=(req,res)=>{
 }
 
 
+const getOrderById = (req,res)=>{
+    const id=req.params.id
+    getOrderFromId(res,id);
+}
+const getProductById = (req,res)=>{
+    const id=req.params.id
+    getProductFromId(res,id);
+}
+
+const getBrandById = (req,res)=>{
+    const id=req.params.id
+    getBrandFromId(res,id);
+}
+
+
 //export the functions
 
 
 module.exports={
+    login,
+    userLogout,
     dashboard,
     getProducts,
     getOrders,
@@ -180,5 +213,8 @@ module.exports={
     deleteOneProduct,
     insertOrder,
     deleteOrder,
-    updateOrder
+    updateOrder,
+    getOrderById,
+    getBrandById,
+    getProductById
 }

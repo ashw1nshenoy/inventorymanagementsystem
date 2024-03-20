@@ -1,6 +1,33 @@
 const db=require('../db/connect')
+const jwt =require( "jsonwebtoken");
+const bcrypt =require( 'bcrypt')
 
+//Login
+const userLogin=(req,res)=>{
+    const sql = "SELECT * from user Where email = ? and password = ?";
+    db.query(sql, [req.body.email, req.body.password], (err, result) => {
+      if (err) return res.json({ loginStatus: false, Error: "Query error" });
+      if (result.length > 0) {
+        const email = result[0].email;
+        const token = jwt.sign(
+          { role: "admin", email: email, id: result[0].id },
+          "jwt_secret_key",
+          { expiresIn: "1d" }
+        );
+        res.cookie('token', token)
+        return res.json({ loginStatus: true });
+      } else {
+          return res.json({ loginStatus: false, Error:"wrong email or password" });
+      }
+    });
+}
 
+//Logout
+
+const logout= (res) => {
+    res.clearCookie('token')
+    return res.json({Status: true})
+}
 
 //Query to count All orders
 const countProducts = () => {
@@ -29,7 +56,7 @@ const countOrders = () => {
 
 const countUsers = () => {
     return new Promise((resolve, reject) => {
-        const ans = `SELECT count(id) AS user_count FROM inventory.users`;
+        const ans = `SELECT count(*) AS user_count FROM inventory.user`;
         db.query(ans, (error, result, fields) => {
             if (error)
                 reject(error);
@@ -79,14 +106,14 @@ const insertBrand=(res,brandName,status)=>{
 
 //get One Brand
 
-// const OneBrand=(res,id)=>{
-//     const ans=`select * from inventory.brand where brand_no=?`
-//     db.query(ans,[id],(error,result,fields)=>{
-//         if(error)
-//             return res.status(400).json(error)
-//         return res.status(200).json(result)
-//     })
-// }
+const OneBrand=(res,id)=>{
+    const ans=`select * from inventory.brand where brand_no=?`
+    db.query(ans,[id],(error,result,fields)=>{
+        if(error)
+            return res.status(400).json(error)
+        return res.status(200).json(result)
+    })
+}
 
 
 //Edit a brand 
@@ -267,7 +294,30 @@ const delOrder=(res,id)=>{
 
 
 
-
+const getOrderFromId=(res,id)=>{
+    const ans=`SELECT *from inventory.orders where cust_id=?`
+    db.query(ans,[id],(error,result,feilds)=>{
+        if(error)
+            return res.status(404).json(error)
+        return res.status(200).json(result)
+    })
+}
+const getProductFromId=(res,id)=>{
+    const ans=`SELECT *from inventory.products where product_no=?`
+    db.query(ans,[id],(error,result,feilds)=>{
+        if(error)
+            return res.status(404).json(error)
+        return res.status(200).json(result)
+    })
+}
+const getBrandFromId=(res,id)=>{
+    const ans=`SELECT *from inventory.brand where brand_no=?`
+    db.query(ans,[id],(error,result,feilds)=>{
+        if(error)
+            return res.status(404).json(error)
+        return res.status(200).json(result)
+    })
+}
 
 
 
@@ -276,6 +326,8 @@ const delOrder=(res,id)=>{
 
 
 module.exports={
+    userLogin,
+    logout,
     countOrders,
     countProducts,
     countUsers,
@@ -295,5 +347,9 @@ module.exports={
     deleteProduct,
     createOrder,
     delOrder,
-    updateOneOrder
+    updateOneOrder,
+    getOrderFromId,
+    OneBrand,
+    getProductFromId,
+    getBrandFromId
 }
