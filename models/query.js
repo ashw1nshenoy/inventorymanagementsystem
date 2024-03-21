@@ -1,6 +1,5 @@
 const db=require('../db/connect')
 const jwt =require( "jsonwebtoken");
-const bcrypt =require( 'bcrypt')
 
 //Login
 const userLogin=(req,res)=>{
